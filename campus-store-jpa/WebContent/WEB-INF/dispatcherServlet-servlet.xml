@@ -20,6 +20,17 @@
 		<property name="suffix" value=".jsp"></property>
 	</bean>
 	
+	<mvc:interceptors>
+		<!-- 配置自定义的拦截器 -->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/product/find"/>
+            <mvc:exclude-mapping path="/product/find/classification_id"/>
+            <mvc:exclude-mapping path="/user/login/*"/>
+            <bean class="com.tna.campus_store.interceptor.Interceptor"/>
+        </mvc:interceptor>
+	</mvc:interceptors>
+	
 	<!-- 两个标准配置 -->
 	<!-- 将SpringMVC不能处理的请求交给Tomcat -->
 	<mvc:default-servlet-handler/>

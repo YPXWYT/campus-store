@@ -1,6 +1,7 @@
 package com.tna.campus_store.service.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,6 +15,7 @@ import com.tna.campus_store.beans.Msg;
 import com.tna.campus_store.beans.Order;
 import com.tna.campus_store.beans.Product;
 import com.tna.campus_store.beans.ProductKey;
+import com.tna.campus_store.beans.TokenMsg;
 import com.tna.campus_store.beans.User;
 import com.tna.campus_store.exception.BalanceException;
 import com.tna.campus_store.exception.CountException;
@@ -42,32 +44,46 @@ public class UserServiceImpl implements UserService{
 		User u1 = null;
 		User u2 = null;
 		User u3 = null;
+		String uuid = null;
 		if(((u1 = userRepository.findByAccountAndPassword(account, password))!=null)||
 				((u2 = userRepository.findByEmailAndPassword(account, password))!=null)||
 				(u3 = userRepository.findByPhoneNumberAndPassword(account, password))!=null) {
 			if(u1!=null) {
-				return Msg.success("登录成功！").add("user", u1);
+				uuid = UUID.randomUUID().toString();
+				System.out.println(uuid);
+				redisUtils.set(uuid, uuid, 7200);
+				return TokenMsg.success("登录成功！", uuid).add("user", u1);
 			}else if(u2!=null){
-				return Msg.success("登录成功！").add("user", u2);
+				uuid = UUID.randomUUID().toString();
+				System.out.println(uuid);
+				redisUtils.set(uuid, uuid, 7200);
+				return TokenMsg.success("登录成功！", uuid).add("user", u2);
 			}else {
-				return Msg.success("登录成功！").add("user", u3);
+				uuid = UUID.randomUUID().toString();
+				System.out.println(uuid);
+				redisUtils.set(uuid, uuid, 7200);
+				return TokenMsg.success("登录成功！", uuid).add("user", u3);
 			}
 		}else {
-			return Msg.fail("登录失败！请检查用户名或密码是否正确！");
+			return TokenMsg.fail("登录失败！请检查用户名或密码是否正确！");
 		}
 	}
 	
 	public Msg loginByMobilePhone(String verification_code,HttpSession session) {
 		User user = null;
+		String uuid = null;
 		if(redisUtils.hasKey(verification_code)) {
 			redisUtils.del(verification_code);
 			if((user = userRepository.findByPhoneNumber((String) session.getAttribute("phoneNumber")))!=null) {
-				return Msg.success("登录成功！").add("user", user);
+				uuid = UUID.randomUUID().toString();
+				System.out.println(uuid);
+				redisUtils.set(uuid, uuid, 7200);
+				return TokenMsg.success("登录成功！", uuid).add("user", user);
 			}else {
-				return Msg.fail("该号码还未注册！").add("user", user);
+				return TokenMsg.fail("该号码还未注册！").add("user", user);
 			}			
 		}else {
-			return Msg.fail("验证码输入错误或者已过期！");
+			return TokenMsg.fail("验证码输入错误或者已过期！");
 		}
 	}
 	

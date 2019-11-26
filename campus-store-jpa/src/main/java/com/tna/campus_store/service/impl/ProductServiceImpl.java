@@ -1,5 +1,7 @@
 package com.tna.campus_store.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,4 +59,33 @@ public class ProductServiceImpl implements ProductService{
 		}
 	}
 
+	@Override
+	public Msg findOne(Integer product_id) {
+		Product product = productRepository.findOne(product_id);
+		if(product!=null) {
+			return Msg.success("操作成功！").add("product", product);
+		}else {
+			return Msg.fail("此分类不存在！");
+		}		
+	}
+
+	@Override
+	public Msg deleteOne(Integer product_id) {
+		productRepository.delete(product_id);
+		return Msg.success("操作成功！");
+	}
+
+	@Override
+	public Msg findAll() {
+		List<Product> products = productRepository.findAll();
+		if(products!=null) {
+			if(!products.isEmpty()) {
+				return Msg.success("操作成功！").add("products", products);
+			}else {
+				return Msg.fail("还没有添加任何东西~");
+			}
+		}else {
+			return Msg.fail("服务器开小差！");
+		}		
+	}
 }
