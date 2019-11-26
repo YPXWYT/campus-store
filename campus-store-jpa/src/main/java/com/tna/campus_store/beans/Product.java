@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name="sys_product")
@@ -25,7 +26,6 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
-	private Integer sort;
 	@Column(name = "purchase_price",scale = 2)
 	private Double purchasePrice;
 	@Column(name = "sell_price",scale = 2)
@@ -36,9 +36,11 @@ public class Product {
 	private String img;
 	@Column(name = "create_time")
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
 	private Date createTime;
 	@Column(name = "modify_time")
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
 	private Date modifyTime;
 	@Column(name = "use_time")
 	private Integer useTime;
@@ -49,7 +51,8 @@ public class Product {
 	@JsonIgnore
 	@OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
 	private Set<Order> orders = new HashSet<Order>();
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonIgnore
 	private Classification classification;
 
 	public Classification getClassification() {
@@ -67,11 +70,19 @@ public class Product {
 	public Product() {
 		super();
 	}
-	public Product(String name, Date createTime, Date modifyTime) {
+
+	public Product(String name, Double purchasePrice, Double sellPrice, Integer count, String des, Integer status,
+			String img, Date createTime, Integer useTime) {
 		super();
 		this.name = name;
+		this.purchasePrice = purchasePrice;
+		this.sellPrice = sellPrice;
+		this.count = count;
+		this.des = des;
+		this.status = status;
+		this.img = img;
 		this.createTime = createTime;
-		this.modifyTime = modifyTime;
+		this.useTime = useTime;
 	}
 	public Integer getId() {
 		return id;
@@ -84,12 +95,6 @@ public class Product {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public Integer getSort() {
-		return sort;
-	}
-	public void setSort(Integer sort) {
-		this.sort = sort;
 	}
 	public Double getPurchasePrice() {
 		return purchasePrice;

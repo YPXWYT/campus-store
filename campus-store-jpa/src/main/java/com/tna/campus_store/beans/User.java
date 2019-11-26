@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -48,9 +49,11 @@ public class User {
 	private Integer informCount;
 	@Column(name = "create_time")
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
 	private Date createTime;
 	@Column(name = "modify_time")
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
 	private Date modifyTime;
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
 	@JsonIgnore

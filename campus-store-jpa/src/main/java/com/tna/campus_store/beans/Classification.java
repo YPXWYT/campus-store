@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="sys_classification")
 public class Classification {
@@ -18,9 +20,16 @@ public class Classification {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
-	@OneToMany(fetch = FetchType.EAGER,mappedBy = "classification")
+	@OneToMany(mappedBy = "classification",fetch = FetchType.EAGER)
 	private Set<Product> products = new HashSet<Product>();
 	
+	public Classification() {
+		super();
+	}
+	public Classification(String name) {
+		super();
+		this.name = name;
+	}
 	public Set<Product> getProducts() {
 		return products;
 	}

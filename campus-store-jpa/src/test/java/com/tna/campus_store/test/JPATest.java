@@ -48,8 +48,8 @@ public class JPATest {
 	
 	@Test
 	public void testProduct() {
-		productRepository.save(new Product("软件工程师",new Date(),new Date()));
-		productRepository.save(new Product("201742060214",new Date(),new Date()));
+//		productRepository.save(new Product("软件工程师",new Date(),new Date()));
+//		productRepository.save(new Product("201742060214",new Date(),new Date()));
 	}
 	@Test
 	public void init() {

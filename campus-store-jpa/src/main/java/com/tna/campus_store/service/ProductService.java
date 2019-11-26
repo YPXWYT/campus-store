@@ -1,8 +1,9 @@
 package com.tna.campus_store.service;
 
-import org.springframework.stereotype.Service;
+import com.tna.campus_store.beans.Msg;
+import com.tna.campus_store.beans.Product;
 
-@Service
 public interface ProductService {
-
+	Msg findProductByClassificationId(Integer classification_id);
+	Msg saveProductWithClassification(Product product, Integer classification_id,Integer user_id);
 }

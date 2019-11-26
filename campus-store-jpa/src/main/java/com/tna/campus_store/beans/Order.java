@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name="sys_order")
@@ -25,9 +26,11 @@ public class Order {
 	private Integer carrierId;
 	@Column(name = "create_time")
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
 	private Date createTime;
 	@Column(name = "modify_time")
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
 	private Date modifyTime;
 	private Integer status;
 	private Integer count;
