@@ -15,11 +15,13 @@ import com.tna.campus_store.beans.Msg;
 import com.tna.campus_store.beans.Order;
 import com.tna.campus_store.beans.Product;
 import com.tna.campus_store.beans.ProductKey;
+import com.tna.campus_store.beans.Role;
 import com.tna.campus_store.beans.TokenMsg;
 import com.tna.campus_store.beans.User;
 import com.tna.campus_store.exception.BalanceException;
 import com.tna.campus_store.exception.CountException;
 import com.tna.campus_store.repository.ProductRepository;
+import com.tna.campus_store.repository.RoleRepository;
 import com.tna.campus_store.repository.UserRepository;
 import com.tna.campus_store.service.UserService;
 import com.tna.campus_store.utils.RedisUtils;
@@ -30,14 +32,16 @@ public class UserServiceImpl implements UserService{
 	private UserRepository userRepository;
 	private ProductRepository productRepository;
 	private RedisUtils redisUtils;
+	private RoleRepository roleRepository;
 	
 	@Autowired
 	public UserServiceImpl(UserRepository userRepository, RedisUtils redisUtils,
-			ProductRepository productRepository) {
+			ProductRepository productRepository,RoleRepository roleRepository) {
 		super();
 		this.userRepository = userRepository;
 		this.redisUtils = redisUtils;
 		this.productRepository = productRepository;
+		this.roleRepository = roleRepository;
 	}
 	
 	public Msg loginByAccount(String account,String password) {
@@ -50,18 +54,15 @@ public class UserServiceImpl implements UserService{
 				(u3 = userRepository.findByPhoneNumberAndPassword(account, password))!=null) {
 			if(u1!=null) {
 				uuid = UUID.randomUUID().toString();
-				System.out.println(uuid);
-				redisUtils.set(uuid, uuid, 7200);
+				redisUtils.set(uuid, u1.getId(), 7200);
 				return TokenMsg.success("登录成功！", uuid).add("user", u1);
 			}else if(u2!=null){
 				uuid = UUID.randomUUID().toString();
-				System.out.println(uuid);
-				redisUtils.set(uuid, uuid, 7200);
+				redisUtils.set(uuid, u2.getId(), 7200);
 				return TokenMsg.success("登录成功！", uuid).add("user", u2);
 			}else {
 				uuid = UUID.randomUUID().toString();
-				System.out.println(uuid);
-				redisUtils.set(uuid, uuid, 7200);
+				redisUtils.set(uuid, u3.getId(), 7200);
 				return TokenMsg.success("登录成功！", uuid).add("user", u3);
 			}
 		}else {
@@ -69,27 +70,43 @@ public class UserServiceImpl implements UserService{
 		}
 	}
 	
-	public Msg loginByMobilePhone(String verification_code,HttpSession session) {
-		User user = null;
+	public Msg loginByMobilePhone(String verification_code,HttpSession session,String phone_number) {
 		String uuid = null;
-		if(redisUtils.hasKey(verification_code)) {
-			redisUtils.del(verification_code);
-			if((user = userRepository.findByPhoneNumber((String) session.getAttribute("phoneNumber")))!=null) {
-				uuid = UUID.randomUUID().toString();
-				System.out.println(uuid);
-				redisUtils.set(uuid, uuid, 7200);
-				return TokenMsg.success("登录成功！", uuid).add("user", user);
+		if(phone_number!=null) {
+			User user = userRepository.findByPhoneNumber(phone_number);
+			if(redisUtils.hasKey(verification_code)) {
+				redisUtils.del(verification_code);
+				if(user!=null) {
+					if((user = userRepository.findByPhoneNumber((String) session.getAttribute("phoneNumber")))!=null) {
+						uuid = UUID.randomUUID().toString();
+						redisUtils.set(uuid, uuid, 7200);
+						return TokenMsg.success("登录成功！", uuid).add("user", user);
+					}else {
+						return TokenMsg.fail("该号码还未注册！").add("user", user);
+					}
+				}else {
+					return Msg.fail("验证失败，该手机号未注册！");
+				}
 			}else {
-				return TokenMsg.fail("该号码还未注册！").add("user", user);
-			}			
+				return TokenMsg.fail("验证码输入错误或者已过期！");
+			}
 		}else {
-			return TokenMsg.fail("验证码输入错误或者已过期！");
+			return Msg.fail("验证失败，未检测到手机号！");
 		}
 	}
 	
-	public Msg registerByMobilePhone(HttpSession session,String account,String password) {
+	public Msg registerByMobilePhone(HttpSession session,User user,Integer role_id) {
 		String phoneNumber = (String) session.getAttribute("phoneNumber");
-		return Msg.success(phoneNumber);
+		Role role = roleRepository.findOne(role_id);
+		if(role!=null) {
+			user.setPhoneNumber(phoneNumber);
+			user.getRoles().add(role);
+			roleRepository.save(role);
+			userRepository.save(user);
+			return Msg.success("操作成功！");
+		}else {
+			return Msg.fail("该角色不存在！");
+		}
 	}	
 	
 	public Msg registerByMobilePhoneVerify(String verification_code) {
@@ -143,5 +160,86 @@ public class UserServiceImpl implements UserService{
 		}else {
 			return Msg.fail("该用户不存在!");
 		}
+	}
+
+	@Override
+	@Transactional
+	public Msg saveUserWithRole(User user,Integer role_id) {
+		Role role = roleRepository.findOne(role_id);
+		if(role!=null) {
+			user.getRoles().add(role);
+			roleRepository.save(role);
+			userRepository.save(user);
+			return Msg.success("操作成功！");
+		}else {
+			return Msg.fail("该角色不存在！");
+		}
+	}
+
+	@Override
+	@Transactional
+	public Msg saveRole(Role role) {
+		roleRepository.save(role);
+		return Msg.success("操作成功！");
+	}
+
+	@Override
+	@Transactional
+	public Msg deleteUserById(Integer user_id) {
+		userRepository.delete(user_id);
+		return Msg.success("操作成功！");
+	}
+
+	@Override
+	@Transactional
+	public Msg deleteRoleById(Integer role_id) {
+		roleRepository.delete(role_id);
+		return Msg.success("操作成功！");
+	}
+
+	@Override
+	public Msg findUserById(String token) {
+		Integer user_id = (Integer) redisUtils.get(token);
+		if(user_id!=null) {
+			User user = userRepository.findOne(user_id);
+			if(user!=null) {
+				return Msg.success("操作成功！").add("user", user);
+			}else {
+				return Msg.fail("该用户不存在！");
+			}
+		}else {
+			return Msg.fail("服务器错误！");
+		}
+
+	}
+
+	@Override
+	@Transactional
+	public Msg findUserAll() {
+		List<User> users = userRepository.findAll();
+		if(users!=null) {
+			if(!users.isEmpty()) {
+				return Msg.success("操作成功！").add("users", users);
+			}else {
+				return Msg.fail("还没有添加任何用户~");
+			}
+		}else {
+			return Msg.fail("服务器开小差！");
+		}	
+	}
+
+	@Override
+	@Transactional
+	public Msg findRoleAll() {
+		List<Role> roles = roleRepository.findAll();
+		if(roles!=null) {
+			if(!roles.isEmpty()) {
+				return Msg.success("操作成功！").add("roles", roles);
+			}else {
+				return Msg.fail("还没有添加任何角色~");
+			}
+		}else {
+			return Msg.fail("服务器开小差！");
+		}	
 	}
 }

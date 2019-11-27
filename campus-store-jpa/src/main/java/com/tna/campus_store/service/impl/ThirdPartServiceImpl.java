@@ -24,11 +24,11 @@ public class ThirdPartServiceImpl implements ThirdPartService{
 	@Override
 	public Msg sendVerificationCode(String phone_number,HttpSession session) {
 		String verification_code = MessageXsendUtils.getConversionCode();
+		System.out.println(verification_code);
 //		if(redisUtils.set(conversionCode, conversionCode, 300)&&) {
 		if(redisUtils.set(verification_code, verification_code, 300)) {
 //			if(MessageXsendUtils.sendMessage(phoneNumber, conversionCode)) {
 				session.setAttribute("phoneNumber", phone_number);
-				System.out.println(verification_code);
 				return Msg.success("验证码发送成功！");
 //			}else {
 //				return Msg.fail("验证码发送失败！");

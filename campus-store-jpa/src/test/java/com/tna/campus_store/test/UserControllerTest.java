@@ -1,7 +1,6 @@
 package com.tna.campus_store.test;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.tna.campus_store.beans.Product;
 import com.tna.campus_store.beans.ProductKey;
+import com.tna.campus_store.beans.Role;
 import com.tna.campus_store.beans.User;
 import com.tna.campus_store.repository.ProductRepository;
 import com.tna.campus_store.repository.RoleRepository;
@@ -49,7 +49,35 @@ public class UserControllerTest {
 		user.setMoney(100.0);
 		user.setEmail("1259606820@qq.com");
 		user.setPhoneNumber("18785920905");
-		System.out.println(userRepository.save(user));
+		
+		Role role = roleRepository.findOne(1);
+		
+		User user1 = new User();
+		user1.setAccount("ljq");
+		user1.setPassword("123456");
+		user1.setMoney(100.0);
+		user1.setEmail("ljq@qq.com");
+		user1.setPhoneNumber("18888888888");
+		
+		user.getRoles().add(role);
+		user1.getRoles().add(role);
+		userRepository.save(user);
+		userRepository.save(user1);
+		roleRepository.save(role);
+	}
+	
+	@Test
+	public void saveRole() {
+		Role role = new Role("管理员");
+		Role role1 = new Role("普通用户");
+		Role role2 = new Role("商家");
+		Role role3 = new Role("代领员");
+		List<Role> roles = new ArrayList<Role>();
+		roles.add(role);
+		roles.add(role1);
+		roles.add(role2);
+		roles.add(role3);
+		roleRepository.save(roles);
 	}
 	
 	@Test

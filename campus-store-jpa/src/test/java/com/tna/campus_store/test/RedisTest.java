@@ -23,7 +23,9 @@ public class RedisTest {
 	
 	@Test
 	public void testHaseKey() {
-		System.out.println(redisUtils.hasKey("k1"));
+//		System.out.println(redisUtils.hasKey("k1"));
+		System.out.println((Integer)redisUtils.get("7e3ecb8e-0233-4cd9-8f26-3c90deb38f92"));
+		System.out.println((Integer) redisUtils.get("7e3ecb8e-0233-4cd9-8f26-3c90deb38f92"));
 	}
 	
 	@Test

@@ -23,6 +23,14 @@ public class Role {
     @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)  //配置多表关系
     @JsonIgnore
     private Set<User> users = new HashSet<User>();
+    
+	public Role() {
+		super();
+	}
+	public Role(String name) {
+		super();
+		this.name = name;
+	}
 	public Set<User> getUsers() {
 		return users;
 	}

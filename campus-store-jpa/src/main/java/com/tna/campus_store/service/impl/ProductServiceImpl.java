@@ -65,7 +65,7 @@ public class ProductServiceImpl implements ProductService{
 		if(product!=null) {
 			return Msg.success("操作成功！").add("product", product);
 		}else {
-			return Msg.fail("此分类不存在！");
+			return Msg.fail("该产品不存在！");
 		}		
 	}
 

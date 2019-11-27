@@ -25,8 +25,12 @@
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/product/find"/>
-            <mvc:exclude-mapping path="/product/find/classification_id"/>
+            <mvc:exclude-mapping path="/product/find/*"/>
             <mvc:exclude-mapping path="/user/login/*"/>
+            <mvc:exclude-mapping path="/user/register"/>
+            <mvc:exclude-mapping path="/user/register/*"/>
+            <mvc:exclude-mapping path="/user/find_user"/>
+            <mvc:exclude-mapping path="/third-part/submail/send"/>
             <bean class="com.tna.campus_store.interceptor.Interceptor"/>
         </mvc:interceptor>
 	</mvc:interceptors>

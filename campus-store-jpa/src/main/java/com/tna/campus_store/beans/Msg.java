@@ -13,7 +13,7 @@ public class Msg {
 	private int code;
 	private String msg;
 	
-	private Map<String, Object> responseBody = new HashMap<String, Object>();
+	private Map<String, Object> data = new HashMap<String, Object>();
 
 	public static Msg success(String msg){
 		Msg result = new Msg();
@@ -30,7 +30,7 @@ public class Msg {
 	}
 	
 	public Msg add(String key,Object value){
-		this.getResponseBody().put(key, value);
+		this.getData().put(key, value);
 		return this;
 	}
 	
@@ -50,12 +50,14 @@ public class Msg {
 		this.msg = msg;
 	}
 
-	public Map<String, Object> getResponseBody() {
-		return responseBody;
+	public Map<String, Object> getData() {
+		return data;
 	}
 
-	public void setResponseBody(Map<String, Object> responseBody) {
-		this.responseBody = responseBody;
+	public void setData(Map<String, Object> data) {
+		this.data = data;
 	}
+
+
 	
 }

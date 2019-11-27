@@ -6,7 +6,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tna.campus_store.beans.Msg;
 import com.tna.campus_store.beans.ProductKey;
+import com.tna.campus_store.beans.Role;
 import com.tna.campus_store.beans.User;
 import com.tna.campus_store.exception.BalanceException;
 import com.tna.campus_store.exception.CountException;
@@ -45,26 +48,28 @@ public class UserController {
 		this.userRepository = userRepository;
 	}
 
-	@RequestMapping("/login/account")
+	@RequestMapping(value="/login/account",method = RequestMethod.POST)
 	public Msg loginByAccount(@RequestParam("account")String account,@RequestParam("password")String password) {
 		return userService.loginByAccount(account, password);
 	}
 	
-	@RequestMapping("/login/mobile-phone")
-	public Msg loginByMobilePhone(@RequestParam("verification_code")String verification_code,HttpSession session) {
-		return userService.loginByMobilePhone(verification_code, session);
+	@RequestMapping("/login/mobile_phone")
+	public Msg loginByMobilePhone(@RequestParam("verification_code")String verification_code,HttpSession session,String phone_number) {
+		return userService.loginByMobilePhone(verification_code, session,phone_number);
 	}
 	
-	@RequestMapping("/register")
-	public Msg registerByMobilePhone(HttpSession session,String account,String password) {
-		return userService.registerByMobilePhone(session, account, password);
+	@RequestMapping(value="/register",method = RequestMethod.POST)
+	public Msg registerByMobilePhone(HttpSession session,@RequestBody User user,
+			@RequestParam(value = "role_id",defaultValue = "2",required = false) Integer role_id) {
+		return userService.registerByMobilePhone(session, user, role_id);
 	}	
 	
-	@RequestMapping("/register/verify")
-	public Msg registerByMobilePhoneVerify(@RequestParam("verification_code")String verification_code) {
+	@RequestMapping(value="/register/verify",method = RequestMethod.GET)
+	public Msg registerByMobilePhoneVerify(@RequestParam("verification_code")String verification_code,
+			@RequestParam("verification_code")String phone_number) {
 		return userService.registerByMobilePhoneVerify(verification_code);
 	}
-	@RequestMapping(value = "/purchaseByAccount",method = RequestMethod.POST)
+	@RequestMapping(value = "/purchase_a",method = RequestMethod.POST)
 	public Msg purchaseByAccount(@RequestParam("user_id") Integer user_id, @RequestBody ProductKey pKey) {
 		User user = userRepository.findOne(user_id);
 		if(user!=null) {
@@ -73,7 +78,6 @@ public class UserController {
 			try {
 				return userService.purchaseByAccount(user, pKey);
 			} catch (CountException | BalanceException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return Msg.fail(e.getMessage());
 			}
@@ -82,8 +86,43 @@ public class UserController {
 		}
 	}
 	
-	@RequestMapping(value = "/purchaseMultiByAccount",method = RequestMethod.POST)
+	@RequestMapping(value = "/purchase_multi_a",method = RequestMethod.POST)
 	public Msg purchaseMultiByAccount(@RequestParam("user_id") Integer user_id, @RequestBody List<ProductKey> pKeys) {
 		return userService.purchaseMultiByAccount(user_id, pKeys);
+	}
+	
+	@RequestMapping(value = "/save_user",method = RequestMethod.POST)
+	public Msg saveUserWithRole(@RequestBody User user,@RequestParam(value = "role_id",defaultValue = "2") Integer role_id) {
+		return userService.saveUserWithRole(user, role_id);
+	}
+	
+	@RequestMapping(value = "/save_role",method = RequestMethod.POST)
+	public Msg saveRole(@RequestBody Role role) {
+		return userService.saveRole(role);
+	}
+	
+	@RequestMapping(value = "/delete_user/{id}",method = RequestMethod.DELETE)
+	public Msg deleteUserById(@PathVariable("id") Integer user_id) {
+		return userService.deleteUserById(user_id);
+	}
+	
+	@RequestMapping(value = "/delete_role/{id}",method = RequestMethod.DELETE)
+	public Msg deleteRoleById(@PathVariable("id") Integer role_id) {
+		return userService.deleteRoleById(role_id);
+	}
+	
+	@RequestMapping(value = "/find_u_one",method = RequestMethod.GET)
+	public Msg findUserByToken(@RequestHeader(name = "token") String token) {
+		return userService.findUserById(token);
+	}
+	
+	@RequestMapping(value = "/find_u_all",method = RequestMethod.GET)
+	public Msg findUserAll() {
+		return userService.findUserAll();
+	}
+	
+	@RequestMapping(value = "/find_role",method = RequestMethod.GET)
+	public Msg findRoleAll() {
+		return userService.findRoleAll();
 	}
 }

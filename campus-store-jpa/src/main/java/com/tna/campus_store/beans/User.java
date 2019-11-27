@@ -20,9 +20,12 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="sys_user")
+@JsonIgnoreProperties(value = {"password","createTime","modifyTime","products",
+		"orders","addresses","studentId","name"})
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,7 +44,6 @@ public class User {
 	private String headImg;
 	@Column(name = "phone_number")
 	private String phoneNumber;
-	private String address;
 	private Integer reputation;
 	@Column(name = "confirm_status")
 	private Integer confirmStatus;
@@ -56,19 +58,18 @@ public class User {
 	@JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
 	private Date modifyTime;
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-	@JsonIgnore
 	private Set<Product> products = new HashSet<Product>();
 	
 	@JoinTable(name = "sys_user_role",
 			joinColumns = {@JoinColumn(name = "user_id",referencedColumnName = "id")},
 			inverseJoinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "id")})
-	@ManyToMany(targetEntity = Role.class,fetch = FetchType.LAZY)
-	@JsonIgnore
+	@ManyToMany(targetEntity = Role.class,fetch = FetchType.EAGER)
 	private Set<Role> roles = new HashSet<Role>();
 	
 	@OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-	@JsonIgnore
 	private Set<Order> orders = new HashSet<Order>();
+	@OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+	private Set<Address> addresses = new HashSet<Address>(); 
 
 	public User(String name, Date createTime, Date modifyTime) {
 		super();
@@ -81,15 +82,13 @@ public class User {
 		super();
 	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", studentId=" + studentId + ", name=" + name + ", nick=" + nick + ", sex=" + sex
-				+ ", account=" + account + ", password=" + password + ", email=" + email + ", money=" + money
-				+ ", headImg=" + headImg + ", phoneNumber=" + phoneNumber + ", address=" + address + ", reputation="
-				+ reputation + ", confirmStatus=" + confirmStatus + ", informCount=" + informCount + ", createTime="
-				+ createTime + ", modifyTime=" + modifyTime + "]";
+	public Set<Address> getAddresses() {
+		return addresses;
 	}
 
+	public void setAddresses(Set<Address> addresses) {
+		this.addresses = addresses;
+	}
 
 	public Integer getId() {
 		return id;
@@ -199,17 +198,6 @@ public class User {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-
-
-	public String getAddress() {
-		return address;
-	}
-
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
 
 	public Integer getReputation() {
 		return reputation;
