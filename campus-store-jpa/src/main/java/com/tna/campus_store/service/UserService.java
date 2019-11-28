@@ -38,4 +38,8 @@ public interface UserService {
 	Msg findUserAll();
 		
 	Msg findRoleAll();
+	
+	Msg userIsExistByEmail(String email);
+	
+	Msg userIsExistByAccount(String account);
 }

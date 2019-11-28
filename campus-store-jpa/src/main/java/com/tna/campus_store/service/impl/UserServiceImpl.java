@@ -55,15 +55,15 @@ public class UserServiceImpl implements UserService{
 			if(u1!=null) {
 				uuid = UUID.randomUUID().toString();
 				redisUtils.set(uuid, u1.getId(), 7200);
-				return TokenMsg.success("登录成功！", uuid).add("user", u1);
+				return TokenMsg.success("登录成功！", uuid);
 			}else if(u2!=null){
 				uuid = UUID.randomUUID().toString();
 				redisUtils.set(uuid, u2.getId(), 7200);
-				return TokenMsg.success("登录成功！", uuid).add("user", u2);
+				return TokenMsg.success("登录成功！", uuid);
 			}else {
 				uuid = UUID.randomUUID().toString();
 				redisUtils.set(uuid, u3.getId(), 7200);
-				return TokenMsg.success("登录成功！", uuid).add("user", u3);
+				return TokenMsg.success("登录成功！", uuid);
 			}
 		}else {
 			return TokenMsg.fail("登录失败！请检查用户名或密码是否正确！");
@@ -241,5 +241,25 @@ public class UserServiceImpl implements UserService{
 		}else {
 			return Msg.fail("服务器开小差！");
 		}	
+	}
+
+	@Override
+	public Msg userIsExistByEmail(String email) {
+		User user = userRepository.findByEmail(email);
+		if(user!=null) {
+			return Msg.fail("邮箱已存在！");
+		}else {
+			return Msg.success("邮箱可用！");
+		}
+	}
+
+	@Override
+	public Msg userIsExistByAccount(String account) {
+		User user = userRepository.findByAccount(account);
+		if(user!=null) {
+			return Msg.fail("账号已存在！");
+		}else {
+			return Msg.success("账号可用！");
+		}
 	}
 }

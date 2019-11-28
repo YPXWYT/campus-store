@@ -14,29 +14,28 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="sys_user")
-@JsonIgnoreProperties(value = {"password","createTime","modifyTime","products",
-		"orders","addresses","studentId","name"})
+@JsonIgnoreProperties(value = {"createTime","modifyTime","products",
+		"orders","addresses"})
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	@Column(name = "student_id")
-	private String studentId;
-	private String name;
 	private String nick;
 	private Character sex;
+	@Column(unique = true)
 	private String account;
 	private String password;
+	@Column(unique = true)
 	private String email;
 	@Column(scale = 2)
 	private Double money;
@@ -45,10 +44,6 @@ public class User {
 	@Column(name = "phone_number")
 	private String phoneNumber;
 	private Integer reputation;
-	@Column(name = "confirm_status")
-	private Integer confirmStatus;
-	@Column(name = "inform_count")
-	private Integer informCount;
 	@Column(name = "create_time")
 	@Temporal(TemporalType.TIMESTAMP)
 	@JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
@@ -70,16 +65,22 @@ public class User {
 	private Set<Order> orders = new HashSet<Order>();
 	@OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
 	private Set<Address> addresses = new HashSet<Address>(); 
+	@OneToOne(mappedBy = "user",fetch = FetchType.LAZY)
+	private Identification identification;		
 
-	public User(String name, Date createTime, Date modifyTime) {
-		super();
-		this.name = name;
-		this.createTime = createTime;
-		this.modifyTime = modifyTime;
+	
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", account=" + account + ", password=" + password + ", email=" + email + "]";
 	}
 
-	public User() {
-		super();
+	public Identification getIdentification() {
+		return identification;
+	}
+
+	public void setIdentification(Identification identification) {
+		this.identification = identification;
 	}
 
 	public Set<Address> getAddresses() {
@@ -98,27 +99,6 @@ public class User {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-
-	public String getStudentId() {
-		return studentId;
-	}
-
-
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 
 	public String getNick() {
 		return nick;
@@ -207,27 +187,6 @@ public class User {
 	public void setReputation(Integer reputation) {
 		this.reputation = reputation;
 	}
-
-
-	public Integer getConfirmStatus() {
-		return confirmStatus;
-	}
-
-
-	public void setConfirmStatus(Integer confirmStatus) {
-		this.confirmStatus = confirmStatus;
-	}
-
-
-	public Integer getInformCount() {
-		return informCount;
-	}
-
-
-	public void setInformCount(Integer informCount) {
-		this.informCount = informCount;
-	}
-
 
 	public Date getCreateTime() {
 		return createTime;

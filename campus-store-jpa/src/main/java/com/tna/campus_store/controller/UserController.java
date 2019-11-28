@@ -61,6 +61,7 @@ public class UserController {
 	@RequestMapping(value="/register",method = RequestMethod.POST)
 	public Msg registerByMobilePhone(HttpSession session,@RequestBody User user,
 			@RequestParam(value = "role_id",defaultValue = "2",required = false) Integer role_id) {
+		System.out.println(user);
 		return userService.registerByMobilePhone(session, user, role_id);
 	}	
 	
@@ -124,5 +125,15 @@ public class UserController {
 	@RequestMapping(value = "/find_role",method = RequestMethod.GET)
 	public Msg findRoleAll() {
 		return userService.findRoleAll();
+	}
+	
+	@RequestMapping(value = "/is_exist_e",method = RequestMethod.GET)
+	public Msg userIsExistByEmail(@RequestParam(value = "email") String email) {
+		return userService.userIsExistByEmail(email);
+	}
+	
+	@RequestMapping(value = "/is_exist_a",method = RequestMethod.GET)
+	public Msg userIsExistByAccount(@RequestParam(value = "account") String account) {
+		return userService.userIsExistByAccount(account);
 	}
 }

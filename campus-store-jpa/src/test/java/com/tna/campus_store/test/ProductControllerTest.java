@@ -51,6 +51,7 @@ public class ProductControllerTest {
 	}
 	
 	@Test
+	
 	public void saveClassification() {
 		List<Classification> classifications = new ArrayList<Classification>();
 		Classification classification = new Classification("书籍");
