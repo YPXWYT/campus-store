@@ -23,7 +23,7 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public Msg findOne(Integer order_id) {
+	public Msg findOneByOrderId(Integer order_id) {
 		if(order_id!=null) {
 			Order order = orderRepository.findOne(order_id);
 			if(order!=null) {
@@ -44,6 +44,12 @@ public class OrderServiceImpl implements OrderService{
 		}else {
 			return Msg.fail("订单号不能为空！");
 		}
+	}
+
+	@Override
+	public Msg findOneByUserToken(String token) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

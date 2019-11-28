@@ -33,7 +33,7 @@ public interface UserService {
 	
 	Msg deleteRoleById(Integer role_id);
 	
-	Msg findUserById(String token);
+	Msg findUserByToken(String token);
 	
 	Msg findUserAll();
 		

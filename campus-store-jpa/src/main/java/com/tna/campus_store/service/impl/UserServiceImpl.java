@@ -198,7 +198,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public Msg findUserById(String token) {
+	public Msg findUserByToken(String token) {
 		Integer user_id = (Integer) redisUtils.get(token);
 		if(user_id!=null) {
 			User user = userRepository.findOne(user_id);

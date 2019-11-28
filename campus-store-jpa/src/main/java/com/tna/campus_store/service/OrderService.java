@@ -5,6 +5,10 @@ import com.tna.campus_store.beans.Order;
 
 public interface OrderService {
 	Msg save(Order order);
-	Msg findOne(Integer order_id);
+	
+	Msg findOneByOrderId(Integer order_id);
+	
+	Msg findOneByUserToken(String token);
+	
 	Msg delete(Integer order_id);
 }

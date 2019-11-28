@@ -113,8 +113,14 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/find_u_one",method = RequestMethod.GET)
-	public Msg findUserByToken(@RequestHeader(name = "token") String token) {
-		return userService.findUserById(token);
+//	public Msg findUserByToken(@RequestHeader(name = "token") String token) {
+	public Msg findUserByToken(String token) {
+		if(token!=null) {
+			System.out.println(token);
+			return userService.findUserByToken(token);
+		}else {
+			return Msg.fail("未授权...");
+		}		
 	}
 	
 	@RequestMapping(value = "/find_u_all",method = RequestMethod.GET)
