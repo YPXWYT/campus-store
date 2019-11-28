@@ -72,10 +72,12 @@ public class UserController {
 	}
 	@RequestMapping(value = "/purchase_a",method = RequestMethod.POST)
 	public Msg purchaseByAccount(@RequestParam("user_id") Integer user_id, @RequestBody ProductKey pKey) {
+		if(user_id==null||pKey==null) {
+			return Msg.fail("请求出错，参数不能为空！");
+		}
+		
 		User user = userRepository.findOne(user_id);
 		if(user!=null) {
-			System.out.println(user_id);
-			System.out.println(pKey.getProductId()+"--"+pKey.getCount());
 			try {
 				return userService.purchaseByAccount(user, pKey);
 			} catch (CountException | BalanceException e) {
@@ -89,6 +91,9 @@ public class UserController {
 	
 	@RequestMapping(value = "/purchase_multi_a",method = RequestMethod.POST)
 	public Msg purchaseMultiByAccount(@RequestParam("user_id") Integer user_id, @RequestBody List<ProductKey> pKeys) {
+		if(user_id==null||pKeys==null) {
+			return Msg.fail("请求出错，参数不能为空！");
+		}
 		return userService.purchaseMultiByAccount(user_id, pKeys);
 	}
 	
@@ -113,14 +118,8 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/find_u_one",method = RequestMethod.GET)
-//	public Msg findUserByToken(@RequestHeader(name = "token") String token) {
-	public Msg findUserByToken(String token) {
-		if(token!=null) {
-			System.out.println(token);
-			return userService.findUserByToken(token);
-		}else {
-			return Msg.fail("未授权...");
-		}		
+	public Msg findUserByToken(@RequestHeader(name = "token") String token) {
+			return userService.findUserByToken(token);		
 	}
 	
 	@RequestMapping(value = "/find_u_all",method = RequestMethod.GET)

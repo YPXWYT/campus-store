@@ -38,7 +38,7 @@ public class User {
 	@Column(unique = true)
 	private String email;
 	@Column(scale = 2)
-	private Double money;
+	private Double money=0.0;
 	@Column(name = "head_img")
 	private String headImg;
 	@Column(name = "phone_number")
@@ -47,11 +47,11 @@ public class User {
 	@Column(name = "create_time")
 	@Temporal(TemporalType.TIMESTAMP)
 	@JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
-	private Date createTime;
+	private Date createTime = new Date();
 	@Column(name = "modify_time")
 	@Temporal(TemporalType.TIMESTAMP)
 	@JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
-	private Date modifyTime;
+	private Date modifyTime = new Date();
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
 	private Set<Product> products = new HashSet<Product>();
 	

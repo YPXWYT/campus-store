@@ -29,15 +29,15 @@ public class Order {
 	@Column(name = "create_time")
 	@Temporal(TemporalType.TIMESTAMP)
 	@JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
-	private Date createTime;
+	private Date createTime = new Date();
 	@Column(name = "modify_time")
 	@Temporal(TemporalType.TIMESTAMP)
 	@JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
-	private Date modifyTime;
-	private Integer status;
-	private Integer count;
+	private Date modifyTime = new Date();
+	private Integer status = 0;
+	private Integer count = 0;
 	@Column(scale = 2)
-	private Double total;
+	private Double total = 0.0;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user; 

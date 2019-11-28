@@ -26,21 +26,21 @@ public class Product {
 	private Integer id;
 	private String name;
 	@Column(name = "purchase_price",scale = 2)
-	private Double purchasePrice;
+	private Double purchasePrice = 0.0;
 	@Column(name = "sell_price",scale = 2)
-	private Double sellPrice;
-	private Integer count;
+	private Double sellPrice = 0.0;
+	private Integer count = 0;
 	private String des;
-	private Integer status;
+	private Integer status = 0;
 	private String img;
 	@Column(name = "create_time")
 	@Temporal(TemporalType.TIMESTAMP)
 	@JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
-	private Date createTime;
+	private Date createTime = new Date();
 	@Column(name = "modify_time")
 	@Temporal(TemporalType.TIMESTAMP)
 	@JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
-	private Date modifyTime;
+	private Date modifyTime = new Date();
 	@Column(name = "use_time")
 	private Integer useTime;
 	@ManyToOne(fetch = FetchType.LAZY)

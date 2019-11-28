@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService{
 			CountException.class,BalanceException.class
 	})
 	public Msg purchaseByAccount(User user, ProductKey pKey) throws CountException, BalanceException {
-		Product product = productRepository.findOne(pKey.getProductId());
+			Product product = productRepository.findOne(pKey.getProductId());
 			if(product!=null) {
 				if(product.getCount()>0) {
 					if(user.getMoney()>=(product.getSellPrice()*pKey.getCount())) {
@@ -145,20 +145,24 @@ public class UserServiceImpl implements UserService{
 			CountException.class,BalanceException.class
 	})
 	public Msg purchaseMultiByAccount(Integer user_id, List<ProductKey> pKeys) {
-		User user = userRepository.findOne(user_id);
-		if(user!=null) {
-			for (ProductKey pKey : pKeys) {
-				try {
-					System.out.println(purchaseByAccount(user,pKey).getMsg());
-				} catch (CountException | BalanceException e) {
-					e.printStackTrace();
-					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-					return Msg.fail(e.getMessage());
+		if(pKeys!=null) {
+			User user = userRepository.findOne(user_id);
+			if(user!=null) {
+				for (ProductKey pKey : pKeys) {
+					try {
+						System.out.println(purchaseByAccount(user,pKey).getMsg());
+					} catch (CountException | BalanceException e) {
+						e.printStackTrace();
+						TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+						return Msg.fail(e.getMessage());
+					}
 				}
+				return Msg.success("购买成功！");
+			}else {
+				return Msg.fail("该用户不存在!");
 			}
-			return Msg.success("购买成功！");
 		}else {
-			return Msg.fail("该用户不存在!");
+			return Msg.fail("请求出错，参数不能为空！");
 		}
 	}
 
