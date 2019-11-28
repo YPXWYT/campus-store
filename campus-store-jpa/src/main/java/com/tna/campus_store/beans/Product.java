@@ -1,6 +1,8 @@
 package com.tna.campus_store.beans;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -19,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name="sys_product")
-@JsonIgnoreProperties(value = {"user","order","classification","modifyTime"})
+@JsonIgnoreProperties(value = {"user","order","classification","modifyTime","order"})
 public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,8 +48,8 @@ public class Product {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
-	@OneToOne(mappedBy = "product",fetch = FetchType.LAZY)
-	private Order order;
+	@OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
+	private Set<Order> orders = new HashSet<Order>();
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Classification classification;
 
@@ -58,11 +60,11 @@ public class Product {
 		this.classification = classification;
 	}
 
-	public Order getOrder() {
-		return order;
+	public Set<Order> getOrders() {
+		return orders;
 	}
-	public void setOrder(Order order) {
-		this.order = order;
+	public void setOrders(Set<Order> orders) {
+		this.orders = orders;
 	}
 	public Product() {
 		super();

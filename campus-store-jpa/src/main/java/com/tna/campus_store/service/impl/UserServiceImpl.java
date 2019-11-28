@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService{
 					throw new CountException("您来晚啦，该商品已售完!");
 				}
 			}else {
-				return Msg.fail("该商品不存在!");
+				throw new CountException("商品id="+pKey.getProductId()+"不存在!");
 			}
 	}
 

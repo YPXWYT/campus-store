@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name="sys_order")
-@JsonIgnoreProperties(value = {"user","modifyTime"})
+@JsonIgnoreProperties(value = {"user","modifyTime","product"})
 public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,8 +41,8 @@ public class Order {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user; 
-	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "product_id")
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Product product;
 	@OneToOne(fetch = FetchType.EAGER)
 	private Address address;
