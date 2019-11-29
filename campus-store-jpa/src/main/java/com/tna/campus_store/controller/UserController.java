@@ -61,7 +61,6 @@ public class UserController {
 	@RequestMapping(value="/register",method = RequestMethod.POST)
 	public Msg registerByMobilePhone(HttpSession session,@RequestBody User user,
 			@RequestParam(value = "role_id",defaultValue = "2",required = false) Integer role_id) {
-		System.out.println(user);
 		return userService.registerByMobilePhone(session, user, role_id);
 	}	
 	

@@ -49,6 +49,9 @@ public class UserServiceImpl implements UserService{
 		User u2 = null;
 		User u3 = null;
 		String uuid = null;
+		if(account==null||password==null) {
+			return Msg.fail("参数account、password不能为空！",StatusEnum.HINT.getCode());
+		}
 		if(((u1 = userRepository.findByAccountAndPassword(account, password))!=null)||
 				((u2 = userRepository.findByEmailAndPassword(account, password))!=null)||
 				(u3 = userRepository.findByPhoneNumberAndPassword(account, password))!=null) {
@@ -66,7 +69,7 @@ public class UserServiceImpl implements UserService{
 				return TokenMsg.success("登录成功！", uuid);
 			}
 		}else {
-			return TokenMsg.fail("登录失败！请检查用户名或密码是否正确！");
+			return Msg.fail("登录失败！请检查用户名或密码是否正确！",StatusEnum.HINT.getCode());
 		}
 	}
 	
@@ -82,7 +85,7 @@ public class UserServiceImpl implements UserService{
 						redisUtils.set(uuid, uuid, 7200);
 						return TokenMsg.success("登录成功！", uuid).add("user", user);
 					}else {
-						return TokenMsg.fail("该号码还未注册！").add("user", user);
+						return Msg.fail("该号码还未注册！",StatusEnum.HINT.getCode()).add("user", user);
 					}
 				}else {
 					return Msg.fail("验证失败，该手机号未注册！",StatusEnum.HINT.getCode());
@@ -98,6 +101,10 @@ public class UserServiceImpl implements UserService{
 	public Msg registerByMobilePhone(HttpSession session,User user,Integer role_id) {
 		String phoneNumber = (String) session.getAttribute("phoneNumber");
 		Role role = roleRepository.findOne(role_id);
+		if(userRepository.findByAccount(user.getAccount())!=null||
+				userRepository.findByEmail(user.getEmail())!=null) {
+			return Msg.fail("邮箱或者用户名已经存在！",StatusEnum.HINT.getCode());
+		}
 		if(role!=null) {
 			user.setPhoneNumber(phoneNumber);
 			user.getRoles().add(role);

@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name="sys_product")
-@JsonIgnoreProperties(value = {"user","order","classification","modifyTime","order"})
+@JsonIgnoreProperties(value = {"user","order","classification","modifyTime","orders"})
 public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
