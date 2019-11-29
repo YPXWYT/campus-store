@@ -17,14 +17,14 @@ public class Msg {
 
 	public static Msg success(String msg){
 		Msg result = new Msg();
-		result.setCode(200);
+		result.setCode(2000);
 		result.setMsg(msg);
 		return result;
 	}
 	
-	public static Msg fail(String msg){
+	public static Msg fail(String msg,Integer code){
 		Msg result = new Msg();
-		result.setCode(100);
+		result.setCode(code);
 		result.setMsg(msg);
 		return result;
 	}

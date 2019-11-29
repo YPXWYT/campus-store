@@ -16,6 +16,7 @@ import com.tna.campus_store.beans.Order;
 import com.tna.campus_store.beans.Product;
 import com.tna.campus_store.beans.ProductKey;
 import com.tna.campus_store.beans.Role;
+import com.tna.campus_store.beans.StatusEnum;
 import com.tna.campus_store.beans.TokenMsg;
 import com.tna.campus_store.beans.User;
 import com.tna.campus_store.exception.PurchaseException;
@@ -84,13 +85,13 @@ public class UserServiceImpl implements UserService{
 						return TokenMsg.fail("该号码还未注册！").add("user", user);
 					}
 				}else {
-					return Msg.fail("验证失败，该手机号未注册！");
+					return Msg.fail("验证失败，该手机号未注册！",StatusEnum.HINT.getCode());
 				}
 			}else {
-				return TokenMsg.fail("验证码输入错误或者已过期！");
+				return TokenMsg.fail("验证码输入错误或者已过期！",StatusEnum.HINT.getCode());
 			}
 		}else {
-			return Msg.fail("验证失败，未检测到手机号！");
+			return Msg.fail("验证失败，未检测到手机号！",StatusEnum.HINT.getCode());
 		}
 	}
 	
@@ -104,7 +105,7 @@ public class UserServiceImpl implements UserService{
 			userRepository.save(user);
 			return Msg.success("操作成功！");
 		}else {
-			return Msg.fail("该角色不存在！");
+			return Msg.fail("该角色不存在！",StatusEnum.HINT.getCode());
 		}
 	}	
 	
@@ -113,7 +114,7 @@ public class UserServiceImpl implements UserService{
 			redisUtils.del(verification_code);
 			return Msg.success("验证成功！");
 		}else {
-			return Msg.fail("验证失败，验证码输入错误或者已过期！");
+			return Msg.fail("验证失败，验证码输入错误或者已过期！",StatusEnum.HINT.getCode());
 		}
 	}
 
@@ -153,15 +154,15 @@ public class UserServiceImpl implements UserService{
 					} catch (PurchaseException e) {
 						e.printStackTrace();
 						TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-						return Msg.fail(e.getMessage());
+						return Msg.fail(e.getMessage(),StatusEnum.HINT.getCode());
 					}
 				}
 				return Msg.success("购买成功！");
 			}else {
-				return Msg.fail("该用户不存在!");
+				return Msg.fail("该用户不存在!",StatusEnum.HINT.getCode());
 			}
 		}else {
-			return Msg.fail("请求出错，参数不能为空！");
+			return Msg.fail("请求出错，参数不能为空！",StatusEnum.HINT.getCode());
 		}
 	}
 
@@ -175,7 +176,7 @@ public class UserServiceImpl implements UserService{
 			userRepository.save(user);
 			return Msg.success("操作成功！");
 		}else {
-			return Msg.fail("该角色不存在！");
+			return Msg.fail("该角色不存在！",StatusEnum.HINT.getCode());
 		}
 	}
 
@@ -208,10 +209,10 @@ public class UserServiceImpl implements UserService{
 			if(user!=null) {
 				return Msg.success("操作成功！").add("user", user);
 			}else {
-				return Msg.fail("该用户不存在！");
+				return Msg.fail("该用户不存在！",StatusEnum.HINT.getCode());
 			}
 		}else {
-			return Msg.fail("服务器错误！");
+			return Msg.fail("服务器错误！",StatusEnum.HINT.getCode());
 		}
 
 	}
@@ -224,10 +225,10 @@ public class UserServiceImpl implements UserService{
 			if(!users.isEmpty()) {
 				return Msg.success("操作成功！").add("users", users);
 			}else {
-				return Msg.fail("还没有添加任何用户~");
+				return Msg.fail("还没有添加任何用户~",StatusEnum.HINT.getCode());
 			}
 		}else {
-			return Msg.fail("服务器开小差！");
+			return Msg.fail("服务器开小差！",StatusEnum.HINT.getCode());
 		}	
 	}
 
@@ -239,10 +240,10 @@ public class UserServiceImpl implements UserService{
 			if(!roles.isEmpty()) {
 				return Msg.success("操作成功！").add("roles", roles);
 			}else {
-				return Msg.fail("还没有添加任何角色~");
+				return Msg.fail("还没有添加任何角色~",StatusEnum.HINT.getCode());
 			}
 		}else {
-			return Msg.fail("服务器开小差！");
+			return Msg.fail("服务器开小差！",StatusEnum.HINT.getCode());
 		}	
 	}
 
@@ -250,7 +251,7 @@ public class UserServiceImpl implements UserService{
 	public Msg userIsExistByEmail(String email) {
 		User user = userRepository.findByEmail(email);
 		if(user!=null) {
-			return Msg.fail("邮箱已存在！");
+			return Msg.fail("邮箱已存在！",StatusEnum.HINT.getCode());
 		}else {
 			return Msg.success("邮箱可用！");
 		}
@@ -260,7 +261,7 @@ public class UserServiceImpl implements UserService{
 	public Msg userIsExistByAccount(String account) {
 		User user = userRepository.findByAccount(account);
 		if(user!=null) {
-			return Msg.fail("账号已存在！");
+			return Msg.fail("账号已存在！",StatusEnum.HINT.getCode());
 		}else {
 			return Msg.success("账号可用！");
 		}

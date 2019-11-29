@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tna.campus_store.beans.Msg;
 import com.tna.campus_store.beans.ProductKey;
 import com.tna.campus_store.beans.Role;
+import com.tna.campus_store.beans.StatusEnum;
 import com.tna.campus_store.beans.User;
 import com.tna.campus_store.exception.PurchaseException;
 import com.tna.campus_store.repository.UserRepository;
@@ -72,7 +73,7 @@ public class UserController {
 	@RequestMapping(value = "/purchase_a",method = RequestMethod.POST)
 	public Msg purchaseByAccount(@RequestParam("user_id") Integer user_id, @RequestBody ProductKey pKey) {
 		if(user_id==null||pKey==null) {
-			return Msg.fail("请求出错，参数不能为空！");
+			return Msg.fail("请求出错，参数不能为空！",StatusEnum.HINT.getCode());
 		}
 		
 		User user = userRepository.findOne(user_id);
@@ -81,17 +82,17 @@ public class UserController {
 				return userService.purchaseByAccount(user, pKey);
 			} catch (PurchaseException e) {
 				e.printStackTrace();
-				return Msg.fail(e.getMessage());
+				return Msg.fail(e.getMessage(),StatusEnum.HINT.getCode());
 			}
 		}else {
-			return Msg.fail("该用户不存在!");
+			return Msg.fail("该用户不存在!",StatusEnum.HINT.getCode());
 		}
 	}
 	
 	@RequestMapping(value = "/purchase_multi_a",method = RequestMethod.POST)
 	public Msg purchaseMultiByAccount(@RequestParam("user_id") Integer user_id, @RequestBody List<ProductKey> pKeys) {
 		if(user_id==null||pKeys==null) {
-			return Msg.fail("请求出错，参数不能为空！");
+			return Msg.fail("请求出错，参数不能为空！",StatusEnum.HINT.getCode());
 		}
 		return userService.purchaseMultiByAccount(user_id, pKeys);
 	}

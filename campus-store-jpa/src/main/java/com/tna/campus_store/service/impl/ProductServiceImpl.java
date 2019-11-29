@@ -2,6 +2,8 @@ package com.tna.campus_store.service.impl;
 
 import java.util.List;
 
+import javax.net.ssl.SSLEngineResult.Status;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tna.campus_store.beans.Classification;
 import com.tna.campus_store.beans.Msg;
 import com.tna.campus_store.beans.Product;
+import com.tna.campus_store.beans.StatusEnum;
 import com.tna.campus_store.beans.User;
 import com.tna.campus_store.repository.ClassificationRepository;
 import com.tna.campus_store.repository.ProductRepository;
@@ -42,10 +45,10 @@ public class ProductServiceImpl implements ProductService{
 				productRepository.save(product);
 				return Msg.success("操作成功！");
 			}else {
-				return Msg.fail("此分类不存在！");
+				return Msg.fail("此分类不存在！",StatusEnum.HINT.getCode());
 			}
 		}else {
-			return Msg.fail("该用户不存在！");
+			return Msg.fail("该用户不存在！",StatusEnum.HINT.getCode());
 		}
 	}
 
@@ -55,7 +58,7 @@ public class ProductServiceImpl implements ProductService{
 		if(classification!=null) {
 			return Msg.success("操作成功！").add("classification", classification);
 		}else {
-			return Msg.fail("此分类不存在！");
+			return Msg.fail("此分类不存在！",StatusEnum.HINT.getCode());
 		}
 	}
 
@@ -65,7 +68,7 @@ public class ProductServiceImpl implements ProductService{
 		if(product!=null) {
 			return Msg.success("操作成功！").add("product", product);
 		}else {
-			return Msg.fail("该产品不存在！");
+			return Msg.fail("该产品不存在！",StatusEnum.HINT.getCode());
 		}		
 	}
 
@@ -82,10 +85,10 @@ public class ProductServiceImpl implements ProductService{
 			if(!products.isEmpty()) {
 				return Msg.success("操作成功！").add("products", products);
 			}else {
-				return Msg.fail("还没有添加任何东西~");
+				return Msg.fail("还没有添加任何东西~",StatusEnum.HINT.getCode());
 			}
 		}else {
-			return Msg.fail("服务器开小差！");
+			return Msg.fail("服务器开小差！",StatusEnum.HINT.getCode());
 		}		
 	}
 }
