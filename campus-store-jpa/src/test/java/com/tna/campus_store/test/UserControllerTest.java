@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.tna.campus_store.beans.Apartment;
 import com.tna.campus_store.beans.Product;
 import com.tna.campus_store.beans.ProductKey;
 import com.tna.campus_store.beans.Role;
@@ -47,6 +48,7 @@ public class UserControllerTest {
 //		System.out.println(userRepository.findByAccount("ypx"));
 //		System.out.println(userRepository.findByEmail("1259606820@qq.com"));
 	}
+	
 	
 	@Test
 	public void save() {
