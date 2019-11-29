@@ -8,8 +8,7 @@ import com.tna.campus_store.beans.Msg;
 import com.tna.campus_store.beans.ProductKey;
 import com.tna.campus_store.beans.Role;
 import com.tna.campus_store.beans.User;
-import com.tna.campus_store.exception.BalanceException;
-import com.tna.campus_store.exception.CountException;
+import com.tna.campus_store.exception.PurchaseException;
 
 public interface UserService {
 
@@ -21,7 +20,7 @@ public interface UserService {
 	
 	Msg registerByMobilePhoneVerify(String verification_code);
 	
-	Msg purchaseByAccount(User user, ProductKey pKey) throws CountException, BalanceException;
+	Msg purchaseByAccount(User user, ProductKey pKey) throws PurchaseException;
 	
 	Msg purchaseMultiByAccount(Integer user_id, List<ProductKey> pKeys);
 	

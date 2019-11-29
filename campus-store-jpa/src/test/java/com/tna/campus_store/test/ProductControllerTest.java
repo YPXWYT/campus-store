@@ -46,7 +46,7 @@ public class ProductControllerTest {
 	
 	@Test
 	public void saveProductWithClassification() {
-		Product product = new Product("软件工程备考教程", 99.0, 9.9, 10, "软件工程备考教程", 0, "图片", new Date(), 3);
+		Product product = new Product("软件工程备考教程", 99.0, 9.9, 10, "软件工程备考教程", 0, "https://img.yzcdn.cn/public_files/2017/10/24/320454216bbe9e25c7651e1fa51b31fd.jpeg", new Date(), 3);
 		System.out.println(productService.saveProductWithClassification(product, 4,1).getMsg());
 	}
 	

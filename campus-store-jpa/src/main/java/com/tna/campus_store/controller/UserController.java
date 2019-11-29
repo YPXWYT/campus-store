@@ -18,8 +18,7 @@ import com.tna.campus_store.beans.Msg;
 import com.tna.campus_store.beans.ProductKey;
 import com.tna.campus_store.beans.Role;
 import com.tna.campus_store.beans.User;
-import com.tna.campus_store.exception.BalanceException;
-import com.tna.campus_store.exception.CountException;
+import com.tna.campus_store.exception.PurchaseException;
 import com.tna.campus_store.repository.UserRepository;
 import com.tna.campus_store.service.UserService;
 
@@ -80,7 +79,7 @@ public class UserController {
 		if(user!=null) {
 			try {
 				return userService.purchaseByAccount(user, pKey);
-			} catch (CountException | BalanceException e) {
+			} catch (PurchaseException e) {
 				e.printStackTrace();
 				return Msg.fail(e.getMessage());
 			}

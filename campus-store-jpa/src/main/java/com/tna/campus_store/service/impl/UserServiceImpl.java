@@ -18,8 +18,7 @@ import com.tna.campus_store.beans.ProductKey;
 import com.tna.campus_store.beans.Role;
 import com.tna.campus_store.beans.TokenMsg;
 import com.tna.campus_store.beans.User;
-import com.tna.campus_store.exception.BalanceException;
-import com.tna.campus_store.exception.CountException;
+import com.tna.campus_store.exception.PurchaseException;
 import com.tna.campus_store.repository.ProductRepository;
 import com.tna.campus_store.repository.RoleRepository;
 import com.tna.campus_store.repository.UserRepository;
@@ -119,39 +118,39 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED,rollbackFor = {
-			CountException.class,BalanceException.class
-	})
-	public Msg purchaseByAccount(User user, ProductKey pKey) throws CountException, BalanceException {
+	@Transactional(propagation = Propagation.REQUIRED,rollbackFor = {PurchaseException.class})
+	public Msg purchaseByAccount(User user, ProductKey pKey) throws PurchaseException {
 			Product product = productRepository.findOne(pKey.getProductId());
 			if(product!=null) {
-				if(product.getCount()>0) {
-					if(user.getMoney()>=(product.getSellPrice()*pKey.getCount())) {
-						Order order = userRepository.purchaseByAccount(product, user,pKey.getCount());
-						return Msg.success("购买成功！").add("order", order);
+				if(product.getUser().getId()!=user.getId()) {
+					if(product.getCount()>0) {
+						if(user.getMoney()>=(product.getSellPrice()*pKey.getCount())) {
+							Order order = userRepository.purchaseByAccount(product, user,pKey.getCount());
+							return Msg.success("购买成功！").add("order", order);
+						}else {
+							throw new PurchaseException("您的余额不足!");
+						}
 					}else {
-						throw new BalanceException("您的余额不足!");
+						throw new PurchaseException("您来晚啦，该商品已售完!");
 					}
 				}else {
-					throw new CountException("您来晚啦，该商品已售完!");
+					throw new PurchaseException("不能购买属于自己的商品!");
 				}
 			}else {
-				throw new CountException("商品id="+pKey.getProductId()+"不存在!");
+				throw new PurchaseException("商品id="+pKey.getProductId()+"不存在!");	
 			}
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED,rollbackFor = {
-			CountException.class,BalanceException.class
-	})
+	@Transactional(propagation = Propagation.REQUIRED,rollbackFor = {PurchaseException.class})
 	public Msg purchaseMultiByAccount(Integer user_id, List<ProductKey> pKeys) {
 		if(pKeys!=null) {
 			User user = userRepository.findOne(user_id);
 			if(user!=null) {
 				for (ProductKey pKey : pKeys) {
 					try {
-						System.out.println(purchaseByAccount(user,pKey).getMsg());
-					} catch (CountException | BalanceException e) {
+						purchaseByAccount(user,pKey).getMsg();
+					} catch (PurchaseException e) {
 						e.printStackTrace();
 						TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 						return Msg.fail(e.getMessage());
