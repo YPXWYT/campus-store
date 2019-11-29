@@ -27,7 +27,7 @@ public class ThirdPartServiceImpl implements ThirdPartService{
 
 	@Override
 	public Msg sendVerificationCode(String phone_number,HttpSession session) {
-		if(userRepository.findByPhoneNumber(phone_number)!=null) {
+		if(userRepository.findByPhoneNumber(phone_number)==null) {
 			String verification_code = MessageXsendUtils.getConversionCode();
 			System.out.println(verification_code);
 //			if(redisUtils.set(conversionCode, conversionCode, 300)&&) {
@@ -42,7 +42,7 @@ public class ThirdPartServiceImpl implements ThirdPartService{
 				return Msg.fail("服务器出错(redis...)！",StatusEnum.HINT.getCode());
 			}
 		}else {
-			return Msg.fail("服务器出错(redis...)！",StatusEnum.HINT.getCode());
+			return Msg.fail("该手机号已注册！",StatusEnum.HINT.getCode());
 		}
 	}
 }

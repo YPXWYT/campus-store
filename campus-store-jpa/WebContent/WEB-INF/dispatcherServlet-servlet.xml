@@ -30,6 +30,8 @@
             <mvc:exclude-mapping path="/user/register"/>
             <mvc:exclude-mapping path="/user/register/*"/>
             <mvc:exclude-mapping path="/user/find_user"/>
+            <mvc:exclude-mapping path="/user/is_exist_a"/>
+            <mvc:exclude-mapping path="/user/is_exist_e"/>
             <mvc:exclude-mapping path="/third-part/submail/send"/>
             <bean class="com.tna.campus_store.interceptor.Interceptor"/>
         </mvc:interceptor>
