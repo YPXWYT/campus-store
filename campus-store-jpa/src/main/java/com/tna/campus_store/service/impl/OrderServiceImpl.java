@@ -19,6 +19,9 @@ public class OrderServiceImpl implements OrderService{
 
 	@Override
 	public Msg findOneByUserTokenAndOrderId(String token,Integer order_id) {
+		if(token==null) {
+			return Msg.fail("订单号不能为空！",StatusEnum.HINT.getCode());
+		}
 		if(order_id!=null) {
 			Order order = orderRepository.findOne(order_id);
 			if(order!=null) {
@@ -32,7 +35,7 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public Msg delete(Integer order_id) {
+	public Msg deleteByUserTokenAndOrderId(String token,Integer order_id) {
 		if(order_id!=null) {
 			orderRepository.delete(order_id);
 			return Msg.success("操作成功！");

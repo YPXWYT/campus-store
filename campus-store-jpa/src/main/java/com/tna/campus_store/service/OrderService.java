@@ -8,10 +8,11 @@ public interface OrderService {
 	 * 通过订单id删除订单
 	 * 只有用户自己或者管理员需要时可以删除订单
 	 * 但并非真正删除数据，而是通过改变订单的状态
+	 * @param token	用户的授权信息
 	 * @param order_id	订单号
 	 * @return
 	 */
-	Msg delete(Integer order_id);
+	Msg deleteByUserTokenAndOrderId(String token,Integer order_id);
 	/**
 	 * 删除用户所有订单
 	 * 只有用户自己或者管理员需要时可以删除订单

@@ -38,14 +38,14 @@ public class UserControllerTest {
 //		System.out.println(userRepository.findByPhoneNumberAndPassword("18785920905", "admin"));
 //		System.out.println(userRepository.findByPhoneNumber("18785920905"));
 //		System.out.println(UUID.randomUUID());
-		System.out.println(userRepository.findByAccount("ypx"));
-		System.out.println(userRepository.findByEmail("1259606820@qq.com"));
+//		System.out.println(userRepository.findByAccount("ypx"));
+//		System.out.println(userRepository.findByEmail("1259606820@qq.com"));
 	}
 	
 	@Test
 	public void testFind() {
 //		System.out.println(userRepository.findByAccount("ypx"));
-		System.out.println(userRepository.findByEmail("1259606820@qq.com"));
+//		System.out.println(userRepository.findByEmail("1259606820@qq.com"));
 	}
 	
 	@Test
