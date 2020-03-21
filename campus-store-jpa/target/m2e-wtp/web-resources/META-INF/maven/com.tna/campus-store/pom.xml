@@ -19,7 +19,7 @@
         <json-lib.version>2.4</json-lib.version>
         <httpclient.version>4.5.7</httpclient.version>
         <junit.version>4.12</junit.version>
-        <spring-data-jpa.version>1.9.0.RELEASE</spring-data-jpa.version>
+        <spring-data-jpa.version>1.11.23.RELEASE</spring-data-jpa.version>
         <spring-data-jpa-el.version>2.2.4</spring-data-jpa-el.version>
         <hibernate-validator.version>5.2.1.Final</hibernate-validator.version>
         <aspectjweaver.version>1.6.8</aspectjweaver.version>
