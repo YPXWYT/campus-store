@@ -21,7 +21,7 @@
         <junit.version>4.12</junit.version>
         <spring-data-jpa.version>1.9.0.RELEASE</spring-data-jpa.version>
         <spring-data-jpa-el.version>2.2.4</spring-data-jpa-el.version>
-        <hibernate-validator.version>5.2.1.Final</hibernate-validator.version>
+        <hibernate-validator.version>5.3.5.Final</hibernate-validator.version>
         <aspectjweaver.version>1.6.8</aspectjweaver.version>
         <lombok.version>1.16.18</lombok.version>
     </properties>
