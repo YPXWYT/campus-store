@@ -17,7 +17,7 @@
         <jackson.version>2.9.5</jackson.version>
         <servlet-api.version>3.1.0</servlet-api.version>
         <json-lib.version>2.4</json-lib.version>
-        <httpclient.version>4.5.7</httpclient.version>
+        <httpclient.version>4.5.13</httpclient.version>
         <junit.version>4.12</junit.version>
         <spring-data-jpa.version>1.9.0.RELEASE</spring-data-jpa.version>
         <spring-data-jpa-el.version>2.2.4</spring-data-jpa-el.version>
